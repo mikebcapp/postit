@@ -1,6 +1,5 @@
 class Comment < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :post
-
+  belongs_to :creator, class_name: :user, foreign_key: :user_id
+  belongs_to :post 
   validates :body,  presence: true
 end
