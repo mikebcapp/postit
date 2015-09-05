@@ -1,4 +1,4 @@
-<div class='well'> #bootstrap formatting
+<div class='well'> 
 	<%=form_for @user do |f| %>
 	<%= render 'shared/errors', obj: @user %>
 	<div class='control-group'>
@@ -9,6 +9,6 @@
 		<%= f.label :password %>
 		<%= f.password_field :password %>
 	</div>
-	<%= f.submit @user.new_record? ? "Regiser : Update profile", class: 'btn btn-success' %>
+	<%= f.submit (@user.new_record? ? "Regiser" : "Update profile"), class: 'btn btn-success' %>
 	<%end %>
 </div>
