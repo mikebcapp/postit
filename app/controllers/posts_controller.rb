@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   
   before_action :set_post, only: [:show, :edit, :update, :vote]
   before_action :require_user, except: [:index, :show]
+ # before_action :require_same_user, except: [:index, :show]
 
   def index
     @posts = Post.all.sort_by{|x| x.total_votes}.reverse
@@ -41,15 +42,18 @@ class PostsController < ApplicationController
   end
 
   def vote
-    vote =Vote.create(voteable: @post, user: current_user, vote: params[:vote])
-
-      if vote.valid?
-        flash[:notice]= "Your vote was counted"
-      else
-        flash[:error]= "You can only vote on one post"
+    @vote =Vote.create(voteable: @post, user: current_user, vote: params[:vote])
+      respond_to do |format|
+        format.html do
+            if @vote.valid?
+              flash[:notice]= "Your vote was counted"
+            else
+              flash[:error]= "You can only vote on one post"
+            end      
+              redirect_to :back
+          end
+        format.js 
       end
-      
-    redirect_to :back
   end
 
 
@@ -61,7 +65,7 @@ class PostsController < ApplicationController
   end
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = Post.find_by(slug: params[:id])
   end
 
 end
